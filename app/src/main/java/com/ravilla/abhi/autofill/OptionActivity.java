@@ -98,9 +98,13 @@ public class OptionActivity extends AppCompatActivity
             } else if (id == R.id.nav_settings) {
 
             } else if (id == R.id.nav_signout) {
-                Intent in=new Intent(OptionActivity.this,FingerprintActivity.class);
-                startActivity(in);
+               // Intent in=new Intent(OptionActivity.this,FingerprintActivity.class);
+               // startActivity(in);
                 signout();
+            }
+            else if (id == R.id.nav_generate){
+                Intent in=new Intent(OptionActivity.this,generate.class);
+                startActivity(in);
             }
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

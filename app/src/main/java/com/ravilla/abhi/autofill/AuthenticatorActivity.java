@@ -46,7 +46,6 @@ public class AuthenticatorActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authenticator);
 
-
         // Views
         mStatusTextView = findViewById(R.id.status);
         mDetailTextView = findViewById(R.id.detail);
@@ -55,8 +54,20 @@ public class AuthenticatorActivity extends Activity implements
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.disconnect_button).setOnClickListener(this);
-        configgoogle();
 
+        // [START config_signin]
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        // [END config_signin]
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        // [START initialize_auth]
+        mAuth = FirebaseAuth.getInstance();
+        // [END initialize_auth]
     }
 
     // [START on_start_check_user]
@@ -89,24 +100,6 @@ public class AuthenticatorActivity extends Activity implements
                 // [END_EXCLUDE]
             }
         }
-
-        if(requestCode == Authentication_Request){
-            if (resultCode == 1) {
-                int result=data.getIntExtra("Authentication",0);
-                if(result == 0)
-                {
-                    CharSequence text = "Fingerprint Authentication Failed";
-                    int duration = Toast.LENGTH_LONG;
-
-                    Toast toast = Toast.makeText(this, text, duration);
-                    toast.show();
-                }
-                else{
-                    signIn();
-                }
-            }
-
-        }
     }
     // [END onactivityresult]
 
@@ -114,7 +107,6 @@ public class AuthenticatorActivity extends Activity implements
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
-      //  showProgressDialog();
         // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -134,6 +126,8 @@ public class AuthenticatorActivity extends Activity implements
                             updateUI(null);
                         }
 
+                        // [START_EXCLUDE]
+                        // [END_EXCLUDE]
                     }
                 });
     }
@@ -141,7 +135,6 @@ public class AuthenticatorActivity extends Activity implements
 
     // [START signin]
     private void signIn() {
-
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -150,15 +143,21 @@ public class AuthenticatorActivity extends Activity implements
     private void signOut() {
         // Firebase sign out
         mAuth.signOut();
+
         // Google sign out
-        mGoogleSignInClient.signOut();
-        todefault();
+        mGoogleSignInClient.signOut().addOnCompleteListener(this,
+                new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        updateUI(null);
+                    }
+                });
     }
 
     private void revokeAccess() {
         // Firebase sign out
         mAuth.signOut();
-        todefault();
+
         // Google revoke access
         mGoogleSignInClient.revokeAccess().addOnCompleteListener(this,
                 new OnCompleteListener<Void>() {
@@ -169,15 +168,27 @@ public class AuthenticatorActivity extends Activity implements
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
-      //  hideProgressDialog();
-        if (user != null) {
 
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.sign_in_button) {
+           //int val = authenticate_user();
+           //if(val == 1) {
+            signIn();
+            //}
+        } else if (i == R.id.sign_out_button) {
+            signOut();
+        } else if (i == R.id.disconnect_button) {
+            revokeAccess();
+        }
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
             store(user);
             forward();
-
         } else {
-
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
 
@@ -186,35 +197,14 @@ public class AuthenticatorActivity extends Activity implements
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.sign_in_button) {
-           // Intent in=new Intent(AuthenticatorActivity.this,FingerprintActivity.class);
-          //  startActivityForResult(in,Authentication_Request);
-     //       Intent in=new Intent(AuthenticatorActivity.this,FingerprintActivity.class);
-       //     startActivity(in);
-            signIn();
-        } else if (i == R.id.sign_out_button) {
-            signOut();
-        } else if (i == R.id.disconnect_button) {
-            revokeAccess();
-        }
-    }
 
     private void forward(){
+        //SharedPreferences userpref = getSharedPreferences("User", this.MODE_PRIVATE);
+        //SharedPreferences.Editor file = userpref.edit();
+        //file.putInt("Authentication", 0);
+        //file.apply();
         Intent in=new Intent(AuthenticatorActivity.this,OptionActivity.class);
         startActivity(in);
-    }
-    private void configgoogle(){
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        // [END config_signin]
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        mAuth = FirebaseAuth.getInstance();
     }
     private void store(FirebaseUser user){
         SharedPreferences userpref = getSharedPreferences("User", this.MODE_PRIVATE);
@@ -232,6 +222,13 @@ public class AuthenticatorActivity extends Activity implements
         file.putString("userid", ""+getResources().getString(R.string.default_id));
         file.putString("name",""+getResources().getString(R.string.default_name));
         file.apply();
-    }
 
+    }
+    private int authenticate_user(){
+        Intent auth = new Intent(AuthenticatorActivity.this, FingerprintActivity.class);
+        startActivity(auth);
+        SharedPreferences userpref = getSharedPreferences("User", this.MODE_PRIVATE);
+        int val = userpref.getInt("Authentication", 0);
+        return val;
+    }
 }

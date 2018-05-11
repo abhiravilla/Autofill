@@ -45,7 +45,7 @@
     <string name="title_activity_mainactivity">MainActivity</string>
     <string name="title_activity_option">OptionActivity</string>
     <string name="user_email">Email</string>
-    <string name="user_Id">Userid </string>
+    <string name="user_Id">userid </string>
     <string name="default_name">Autofill User</string>
     <string name="user_name">name</string>
     <string name="default_email">User@gmail.com</string>
@@ -58,6 +58,10 @@
     <string name="title_activity_home">Fingerprint</string>
     <string name="activity_home_desc">You have successfully logged in with fingerprint authentication</string>
     <string name="activity_home_note">Close and re-open the app to see the fingerprint auth screen again</string>
-    <string name="instructions">Place your fingertip on the Home button to verify your identity</string>
+
+    <string name="title_activity_generator">Generator</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_generate">generate</string>
 
 </resources>

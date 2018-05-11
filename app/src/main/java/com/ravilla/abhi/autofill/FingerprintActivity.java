@@ -1,6 +1,9 @@
 package com.ravilla.abhi.autofill;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.KeyguardManager;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.Manifest;
@@ -11,6 +14,8 @@ import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.ActivityCompat;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -38,15 +43,15 @@ public class FingerprintActivity extends AppCompatActivity {
     private FingerprintManager.CryptoObject cryptoObject;
     private FingerprintManager fingerprintManager;
     private KeyguardManager keyguardManager;
-    static final int Authentication_Request = 1;  //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fingerprint);
-
+        startFinger();
+    }
+    private void startFinger(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-
 
             keyguardManager =
                     (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
@@ -86,12 +91,18 @@ public class FingerprintActivity extends AppCompatActivity {
                     cryptoObject = new FingerprintManager.CryptoObject(cipher);
                     FingerprintHandler helper = new FingerprintHandler(this);
                     helper.startAuth(fingerprintManager, cryptoObject);
+                    Button bt =findViewById(R.id.button2);
+                    bt.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            finish();           }
+                    });
+                    finish();
                 }
             }
 
         }
-    }
 
+    }
     private void generateKey() throws FingerprintException {
         try {
 
@@ -162,4 +173,5 @@ public class FingerprintActivity extends AppCompatActivity {
             super(e);
         }
     }
+
 }

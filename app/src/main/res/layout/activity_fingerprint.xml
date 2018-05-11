@@ -1,41 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_fingerprint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="#d6e3ea"
     tools:context="com.ravilla.abhi.autofill.FingerprintActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:layout_centerHorizontal="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:text="FIngerprint Authentication"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
     <TextView
+        android:id="@+id/textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/textview"/>
+        android:layout_centerInParent="true" />
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/ic_fingerprint_black_48dp"
-        android:id="@+id/imageView"
         android:layout_below="@+id/textview"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="36dp" />
+        android:layout_marginTop="36dp"
+        android:icon="@drawable/ic_fingerprint_black_48dp" />
 
     <TextView
+        android:id="@+id/textView2"
+        android:layout_width="228dp"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="181dp"
+        android:layout_marginStart="94dp"
+        android:text="@string/desc_fingerprint" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="80dp"
+        android:layout_height="143dp"
+        android:layout_above="@+id/textview"
+        android:layout_centerHorizontal="true"
+        app:srcCompat="@drawable/ic_fingerprint_black_48dp" />
+
+    <Button
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:text="@string/instructions"
-        android:layout_below="@+id/imageView"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="27dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="46dp"
+        android:text="Cancel" />
 
 </RelativeLayout>

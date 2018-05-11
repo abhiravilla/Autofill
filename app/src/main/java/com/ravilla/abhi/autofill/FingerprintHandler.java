@@ -2,6 +2,7 @@ package com.ravilla.abhi.autofill;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.Manifest;
@@ -24,9 +25,12 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
 
         cancellationSignal = new CancellationSignal();
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
+            SharedPreferences userpref = context.getSharedPreferences("User", context.MODE_PRIVATE);
+            SharedPreferences.Editor file = userpref.edit();
+            file.putInt("Authentication", 0);
+            file.apply();        }
+       manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
+
     }
 
     @Override
@@ -35,6 +39,10 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
         Toast.makeText(context,
                 "Authentication error\n" + errString,
                 Toast.LENGTH_LONG).show();
+        SharedPreferences userpref = context.getSharedPreferences("User", context.MODE_PRIVATE);
+        SharedPreferences.Editor file = userpref.edit();
+        file.putInt("Authentication", -1);
+        file.apply();
     }
 
     @Override
@@ -42,6 +50,10 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
         Toast.makeText(context,
                 "Authentication failed",
                 Toast.LENGTH_LONG).show();
+        SharedPreferences userpref = context.getSharedPreferences("User", context.MODE_PRIVATE);
+        SharedPreferences.Editor file = userpref.edit();
+        file.putInt("Authentication", -1);
+        file.apply();
     }
 
     @Override
@@ -50,6 +62,11 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
         Toast.makeText(context,
                 "Authentication help\n" + helpString,
                 Toast.LENGTH_LONG).show();
+        SharedPreferences userpref = context.getSharedPreferences("User", context.MODE_PRIVATE);
+        SharedPreferences.Editor file = userpref.edit();
+        file.putInt("Authentication", -1);
+        file.apply();
+
     }
 
 
@@ -60,5 +77,10 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
         Toast.makeText(context,
                 "Success!",
                 Toast.LENGTH_LONG).show();
+        SharedPreferences userpref = context.getSharedPreferences("User", context.MODE_PRIVATE);
+        SharedPreferences.Editor file = userpref.edit();
+        file.putInt("Authentication", 1);
+        file.apply();
+
     }
 }

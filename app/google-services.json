@@ -15,20 +15,20 @@
       },
       "oauth_client": [
         {
+          "client_id": "844809174285-lej8m9bv58v7b637oa4mngl6jvh3cn32.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ravilla.abhi.autofill",
+            "certificate_hash": "f881a0bbbb3a370e7898e5130f4acc62627e5bbc"
+          }
+        },
+        {
           "client_id": "844809174285-scjaqn7fu3dkqnj2k0s29130nmj4iuhc.apps.googleusercontent.com",
           "client_type": 3
         },
         {
           "client_id": "844809174285-i0a2td75iqeal8r5k499fm0q8i3cs1ft.apps.googleusercontent.com",
           "client_type": 3
-        },
-        {
-          "client_id": "844809174285-hl2ds50dpck0t9d02d939cchv1s7l2qf.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.ravilla.abhi.autofill",
-            "certificate_hash": "989d105c6f977aec3797236972793a084063ce23"
-          }
         }
       ],
       "api_key": [

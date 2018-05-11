@@ -18,7 +18,7 @@
       "Region": "us-east-2"
     }
   },
-  "Cognito": {
+  "DynamoDBObjectMapper": {
     "Default": {
       "Region": "us-east-2"
     }
