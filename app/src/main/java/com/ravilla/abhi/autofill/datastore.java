@@ -20,11 +20,11 @@ public class datastore extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-                COLUMN_SITE + " TEXT " +
-                COLUMN_USERNAME + " TEXT," +
-                COLUMN_PASSWORD + " TEXT,"+
-                "PRIMARY KEY ( "+COLUMN_SITE+","+COLUMN_USERNAME+"));";
+        String CREATE_TABLE = " CREATE TABLE " + TABLE_NAME + " ( " +
+                COLUMN_SITE + " TEXT, " +
+                COLUMN_USERNAME + " TEXT, " +
+                COLUMN_PASSWORD + " TEXT, "+
+                "PRIMARY KEY ( "+COLUMN_SITE+" , "+COLUMN_USERNAME+" ) );";
         db.execSQL(CREATE_TABLE);
     }
 
@@ -41,7 +41,7 @@ public class datastore extends SQLiteOpenHelper {
         values.put(COLUMN_USERNAME, flist.getuname()); // Username
         values.put(COLUMN_PASSWORD, flist.getpassword()); // Password
         // Inserting Row
-        db.insert(TABLE_NAME, null, values);
+        db.insert(TABLE_NAME,   null, values);
         db.close(); // Closing database connection
     }
     public List<fulllist> getAll() {

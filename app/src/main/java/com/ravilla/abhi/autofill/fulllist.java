@@ -21,8 +21,8 @@ public class fulllist {
     public String getuname() {
         return username;
     }
-    public void setsite(String site) {
-       site =this.site;
+    public void setsite(String s) {
+       site =s;
     }
     public void setUname(String uname) {
         username = uname;

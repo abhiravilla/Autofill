@@ -35,7 +35,16 @@
         <activity
             android:name=".generate"
             android:label="@string/title_activity_generate"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".logins"
+            android:label="@string/title_activity_logins"
+            android:parentActivityName=".OptionActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ravilla.abhi.autofill.OptionActivity" />
+        </activity>
     </application>
 
 </manifest>

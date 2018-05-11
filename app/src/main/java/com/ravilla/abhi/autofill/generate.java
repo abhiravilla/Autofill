@@ -1,6 +1,7 @@
 package com.ravilla.abhi.autofill;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,20 +21,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.text.TextUtils;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+
 import static android.content.Context.MODE_PRIVATE;
 
 
 public class generate extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     private int le=0;
-
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate);
+        context = getApplicationContext();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        TextView tv =findViewById(R.id.password);
+        final Context cn = getApplicationContext();
         SharedPreferences sharedPref = getSharedPreferences(
                 "User", Context.MODE_PRIVATE);
         final String passphrase = sharedPref.getString("userid", "none");
@@ -43,6 +50,7 @@ public class generate extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 TextView tv =findViewById(R.id.password);
+                findViewById(R.id.password).setVisibility(View.VISIBLE);
                 EditText uedt = findViewById(R.id.username);
                 EditText sedt = findViewById(R.id.site);
                 String uname =uedt.getText().toString();
@@ -63,7 +71,8 @@ public class generate extends AppCompatActivity
                         String unpass = enc.encryp(uname,passphrase);
                         String snpass = enc.encryp(sname,passphrase);
                         tv.setText(snpass);
-
+                        datastore ds = new datastore(cn);
+                        ds.addflist(new fulllist(snpass,unpass,enpass));
                     } catch (Exception e) {
                         System.out.println(e);
                     }
@@ -76,11 +85,13 @@ public class generate extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         findViewById(R.id.gen).setOnClickListener(this);
         findViewById(R.id.regen).setOnClickListener(this);
+        findViewById(R.id.save).setOnClickListener(this);
+
+        setvalues(navigationView);
     }
 
     @Override
@@ -117,22 +128,26 @@ public class generate extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected (MenuItem item){
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_home) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_logins) {
+            Intent in=new Intent(generate.this,logins.class);
+            startActivity(in);
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_delete) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_settings) {
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_signout) {
+            signout();
+        }
+        else if (id == R.id.nav_generate){
+            Intent in=new Intent(generate.this,generate.class);
+            startActivity(in);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -143,21 +158,6 @@ public class generate extends AppCompatActivity
     public String generate(int len){
         passgen pg=new passgen(len);
         return(pg.generate());
-        /*
-        encrypt enc = new encrypt();
-        try {
-            String enpass=enc.encrypt(pass);
-            System.out.println(enpass);
-            decrypt dcp = new decrypt();
-            String depass = dcp.decrypt(enpass);
-            System.out.println(depass);
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }{
-
-        }
-        */
     }
     public void onClick(View v) {
         int i = v.getId();
@@ -174,6 +174,7 @@ public class generate extends AppCompatActivity
             findViewById(R.id.regen).setVisibility(View.VISIBLE);
             findViewById(R.id.length).setVisibility(View.GONE);
             findViewById(R.id.password).setVisibility(View.VISIBLE);
+            findViewById(R.id.save).setVisibility(View.VISIBLE);
             TextView tv =findViewById(R.id.password);
             tv.setText(result);
         }else if (i == R.id.regen) {
@@ -183,5 +184,77 @@ public class generate extends AppCompatActivity
             Log.d("Password in Regenerate",""+result);
             tv.setText(result);
         }
+        else if (i == R.id.save){
+            final Context cn = getApplicationContext();
+            SharedPreferences sharedPref = getSharedPreferences(
+                    "User", Context.MODE_PRIVATE);
+            final String passphrase = sharedPref.getString("userid", "none");
+            findViewById(R.id.password).setVisibility(View.VISIBLE);
+            TextView tv =findViewById(R.id.password);
+            EditText uedt = findViewById(R.id.username);
+            EditText sedt = findViewById(R.id.site);
+            String uname =uedt.getText().toString();
+            String sname =sedt.getText().toString();
+            if(TextUtils.isEmpty(uname)){
+                Toast to = Toast.makeText(context,"Enter Username",Toast.LENGTH_LONG);
+                to.show();
+                return ;
+            }else if(TextUtils.isEmpty(sname)){
+                Toast to=Toast.makeText(context,"Enter Site name",Toast.LENGTH_LONG);
+                to.show();
+                return;
+            }else {
+                String password = tv.getText().toString();
+                encrypt enc = new encrypt();
+                try {
+                    String enpass = enc.encryp(password,passphrase);
+                    String unpass = enc.encryp(uname,passphrase);
+                    String snpass = enc.encryp(sname,passphrase);
+                    datastore ds = new datastore(cn);
+                    ds.addflist(new fulllist(snpass,unpass,enpass));
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        }
     }
+    private void signout() {
+        GoogleSignInClient mGoogleSignInClient;
+        todefault();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        // [END config_signin]
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient.signOut();
+        Intent in=new Intent(generate.this,AuthenticatorActivity.class);
+        startActivity(in);
+    }
+    private  void todefault(){
+
+        SharedPreferences userpref = getSharedPreferences("User", this.MODE_PRIVATE);
+        SharedPreferences.Editor file = userpref.edit();
+        file.putString("Email", ""+getResources().getString(R.string.default_email));
+        file.putString("userid", ""+getResources().getString(R.string.default_id));
+        file.putString("name",""+getResources().getString(R.string.default_name));
+        file.apply();
+    }
+
+    public void setvalues(NavigationView navigationView){
+
+        SharedPreferences sharedPref = getSharedPreferences("User", MODE_PRIVATE);
+        String defaultname = getResources().getString(R.string.default_name);
+        String name = sharedPref.getString(getString(R.string.user_name), defaultname);
+        String defaultemail = getResources().getString(R.string.default_email);
+        String email = sharedPref.getString(getString(R.string.user_email), defaultemail);
+        View headerView = navigationView.getHeaderView(0);
+        TextView uiname = (TextView) headerView.findViewById(R.id.name);
+        uiname.setText(name);
+        TextView uiemail = (TextView) headerView.findViewById(R.id.email);
+        uiemail.setText(email);
+    }
+
 }

@@ -49,7 +49,6 @@ public class OptionActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         setvalues(navigationView);
     }
-    private GoogleSignInClient mGoogleSignInClient;
 
         @Override
         public void onBackPressed () {
@@ -92,15 +91,14 @@ public class OptionActivity extends AppCompatActivity
             if (id == R.id.nav_home) {
 
             } else if (id == R.id.nav_logins) {
-
+                Intent in=new Intent(OptionActivity.this,logins.class);
+                startActivity(in);
             } else if (id == R.id.nav_delete) {
 
             } else if (id == R.id.nav_settings) {
 
             } else if (id == R.id.nav_signout) {
-               // Intent in=new Intent(OptionActivity.this,FingerprintActivity.class);
-               // startActivity(in);
-                signout();
+               signout();
             }
             else if (id == R.id.nav_generate){
                 Intent in=new Intent(OptionActivity.this,generate.class);
@@ -111,22 +109,6 @@ public class OptionActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
             return true;
         }
-
-    private void signout() {
-
-        todefault();
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        // [END config_signin]
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        mGoogleSignInClient.signOut();
-        Intent in=new Intent(OptionActivity.this,AuthenticatorActivity.class);
-        startActivity(in);
-    }
 
     public void setvalues(NavigationView navigationView){
 
@@ -142,13 +124,29 @@ public class OptionActivity extends AppCompatActivity
             uiemail.setText(email);
         }
 
-    private  void todefault(){
+
+    private void signout() {
+        GoogleSignInClient mGoogleSignInClient;
+        todefault();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        // [END config_signin]
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient.signOut();
+        Intent in=new Intent(OptionActivity.this,AuthenticatorActivity.class);
+        startActivity(in);
+    }
+    private  void todefault() {
 
         SharedPreferences userpref = getSharedPreferences("User", this.MODE_PRIVATE);
         SharedPreferences.Editor file = userpref.edit();
-        file.putString("Email", ""+getResources().getString(R.string.default_email));
-        file.putString("userid", ""+getResources().getString(R.string.default_id));
-        file.putString("name",""+getResources().getString(R.string.default_name));
+        file.putString("Email", "" + getResources().getString(R.string.default_email));
+        file.putString("userid", "" + getResources().getString(R.string.default_id));
+        file.putString("name", "" + getResources().getString(R.string.default_name));
         file.apply();
     }
 }

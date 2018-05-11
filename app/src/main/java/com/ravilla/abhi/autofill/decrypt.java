@@ -1,21 +1,17 @@
 package com.ravilla.abhi.autofill;
 
-import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
-
 import java.security.spec.KeySpec;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+//import org.apache.commons.codec.binary.Base64;
+import android.util.Base64;
 
-import org.apache.commons.codec.binary.Base64;
 
-
-public class decrypt extends AppCompatActivity {
+public class decrypt{
 	 private static final byte[] SALT = {(byte) 0xA9, (byte) 0x9B, (byte) 0xC8, (byte) 0x32, (byte) 0x56, (byte) 0x35, (byte) 0xE3, (byte) 0x03};
 	    private static final int ITERATION_COUNT = 65536;
 	    private static final int KEY_LENGTH = 128;
@@ -35,7 +31,7 @@ public class decrypt extends AppCompatActivity {
 	        KeySpec keySpec = new PBEKeySpec(passphrase.toCharArray(), SALT, ITERATION_COUNT, KEY_LENGTH);
 	        SecretKey secretKeyTemp = secretKeyFactory.generateSecret(keySpec);
             SecretKey secretKey = new SecretKeySpec(secretKeyTemp.getEncoded(), "AES");
-            encrypt = Base64.decodeBase64(encryptedString);
+            encrypt = Base64.decode(encryptedString,Base64.DEFAULT);
 	        eCipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             eCipher.init(Cipher.ENCRYPT_MODE, secretKey);
 		    byte[] iv = extractIV();
@@ -46,8 +42,7 @@ public class decrypt extends AppCompatActivity {
 	        return new String(decrypted, "UTF8");
 	    
 	    }
-
-	    private byte[] extractCipherText() {
+		private byte[] extractCipherText() {
 	        byte[] ciphertext = new byte[encrypt.length - IV_LENGTH];
 	        System.arraycopy(encrypt, 16, ciphertext, 0, ciphertext.length);
 	        return ciphertext;
@@ -56,9 +51,9 @@ public class decrypt extends AppCompatActivity {
 	    private byte[] decrypt(byte[] encrypt) throws Exception {
 	        return dCipher.doFinal(encrypt);
 	    }
-	    public String decrypt(String text){
+	    public String decrypt(String text,String key){
 	        try {
-                String result = decry(text,"null");
+                String result = decry(text,key);
                 return result;
             }
             catch(Exception e){
