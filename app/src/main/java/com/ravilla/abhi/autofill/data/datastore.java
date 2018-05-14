@@ -1,10 +1,13 @@
-package com.ravilla.abhi.autofill;
+package com.ravilla.abhi.autofill.data;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.ravilla.abhi.autofill.Ldispaly.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +44,8 @@ public class datastore extends SQLiteOpenHelper {
         values.put(COLUMN_USERNAME, flist.getuname()); // Username
         values.put(COLUMN_PASSWORD, flist.getpassword()); // Password
         // Inserting Row
-        db.insert(TABLE_NAME,   null, values);
+        long i = db.insert(TABLE_NAME,   null, values);
+        Log.i("Flow","returned datastore store value     "+i);
         db.close(); // Closing database connection
     }
     public List<fulllist> getAll() {
@@ -53,19 +57,16 @@ public class datastore extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
+            while (cursor.moveToNext()) {
                 fulllist flist = new fulllist();
                 flist.setsite(cursor.getString(0));
                 flist.setUname(cursor.getString(1));
                 flist.setPassword(cursor.getString(2));
-                // Adding contact to list
                 fulist.add(flist);
-            } while (cursor.moveToNext());
-        }
-
-        // return contact list
+            }
+        Log.i("Flow","returned datastore list size "+fulist.size());
         return fulist;
+       // return cursor;
     }
     public int updatelist(fulllist flist) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -75,16 +76,24 @@ public class datastore extends SQLiteOpenHelper {
         String C_SITE = flist.getsite();
         values.put(COLUMN_PASSWORD, flist.getpassword());
         // updating row
-        return db.update(TABLE_NAME, values, COLUMN_SITE + " = ?" + COLUMN_USERNAME + " =?",
+        int eff = db.update(TABLE_NAME, values, COLUMN_SITE + " = ?" + COLUMN_USERNAME + " =?",
                 new String[]{C_SITE,C_USERNAME});
+        return eff;
     }
-    public void deletentry(fulllist flist) {
+    public int deletentry(fulllist flist) {
         SQLiteDatabase db = this.getWritableDatabase();
         String C_USERNAME = flist.getuname();
         String C_SITE = flist.getsite();
 
-        db.delete(TABLE_NAME, COLUMN_SITE + " = ?" + COLUMN_USERNAME + " =?",
+        int res=db.delete(TABLE_NAME, COLUMN_SITE + " = ?" + COLUMN_USERNAME + " =?",
                 new String[]{C_SITE,C_USERNAME});
         db.close();
+        return res;
+    }
+    public Cursor getRow(String sitename, String username){
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME + " WHERE "+COLUMN_SITE+" = '"+sitename+"' AND "+COLUMN_USERNAME+" = '"+username+"'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery(selectQuery,null);
+
     }
 }

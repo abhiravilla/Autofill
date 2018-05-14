@@ -1,4 +1,4 @@
-package com.ravilla.abhi.autofill;
+package com.ravilla.abhi.autofill.menu;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +20,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.ravilla.abhi.autofill.Authentication.AuthenticatorActivity;
+import com.ravilla.abhi.autofill.R;
 
 
 public class OptionActivity extends AppCompatActivity

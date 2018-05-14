@@ -1,4 +1,4 @@
-package com.ravilla.abhi.autofill;
+package com.ravilla.abhi.autofill.menu;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +9,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
-
-import static android.support.v4.content.ContextCompat.startActivity;
+import com.ravilla.abhi.autofill.Authentication.AuthenticatorActivity;
+import com.ravilla.abhi.autofill.R;
 
 class signout extends AppCompatActivity{
     public void out(Context context) {

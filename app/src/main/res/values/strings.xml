@@ -64,5 +64,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_generate">generate</string>
     <string name="title_activity_logins">logins</string>
+    <string name="title_activity_list">list</string>
 
 </resources>

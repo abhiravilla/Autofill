@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".logins">
+    tools:context=".menu.logins">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -25,39 +25,14 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
 
-    <TextView
-        android:id="@+id/sitename"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/username"
-        android:layout_marginTop="133dp"
-        android:hint="Site Name" />
-
-    <TextView
-        android:id="@+id/username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="194dp"
-        android:hint="User Name" />
-
-    <TextView
-        android:id="@+id/password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="258dp"
-        android:hint="Password" />
-
     <Button
         android:id="@+id/show"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/sitename"
-        android:layout_marginBottom="184dp"
-        android:text="Button" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="135dp"
+        android:text="All"
+        android:visibility="visible" />
+
 </RelativeLayout>

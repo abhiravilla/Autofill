@@ -1,11 +1,10 @@
-package com.ravilla.abhi.autofill;
+package com.ravilla.abhi.autofill.menu;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,19 +19,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.text.TextUtils;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.ravilla.abhi.autofill.Authentication.AuthenticatorActivity;
+import com.ravilla.abhi.autofill.R;
+import com.ravilla.abhi.autofill.data.datastore;
+import com.ravilla.abhi.autofill.encryption.encrypt;
+import com.ravilla.abhi.autofill.Ldispaly.fulllist;
+import com.ravilla.abhi.autofill.background.passgen;
 
-import static android.content.Context.MODE_PRIVATE;
+import java.util.List;
 
 
 public class generate extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     private int le=0;
     Context context;
+    String enpass;
+    String unpass;
+    String snpass;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,46 +47,6 @@ public class generate extends AppCompatActivity
         context = getApplicationContext();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final Context cn = getApplicationContext();
-        SharedPreferences sharedPref = getSharedPreferences(
-                "User", Context.MODE_PRIVATE);
-        final String passphrase = sharedPref.getString("userid", "none");
-       //tv.setText(key);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextView tv =findViewById(R.id.password);
-                findViewById(R.id.password).setVisibility(View.VISIBLE);
-                EditText uedt = findViewById(R.id.username);
-                EditText sedt = findViewById(R.id.site);
-                String uname =uedt.getText().toString();
-                String sname =sedt.getText().toString();
-                if(TextUtils.isEmpty(uname)){
-                    Snackbar.make(view, "Enter Username", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    return ;
-                }else if(TextUtils.isEmpty(sname)){
-                    Snackbar.make(view, "Enter Site Name", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    return;
-                }else {
-                    String password = tv.getText().toString();
-                    encrypt enc = new encrypt();
-                    try {
-                        String enpass = enc.encryp(password,passphrase);
-                        String unpass = enc.encryp(uname,passphrase);
-                        String snpass = enc.encryp(sname,passphrase);
-                        tv.setText(snpass);
-                        datastore ds = new datastore(cn);
-                        ds.addflist(new fulllist(snpass,unpass,enpass));
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
-                }
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -185,7 +152,6 @@ public class generate extends AppCompatActivity
             tv.setText(result);
         }
         else if (i == R.id.save){
-            final Context cn = getApplicationContext();
             SharedPreferences sharedPref = getSharedPreferences(
                     "User", Context.MODE_PRIVATE);
             final String passphrase = sharedPref.getString("userid", "none");
@@ -207,11 +173,13 @@ public class generate extends AppCompatActivity
                 String password = tv.getText().toString();
                 encrypt enc = new encrypt();
                 try {
-                    String enpass = enc.encryp(password,passphrase);
-                    String unpass = enc.encryp(uname,passphrase);
-                    String snpass = enc.encryp(sname,passphrase);
-                    datastore ds = new datastore(cn);
-                    ds.addflist(new fulllist(snpass,unpass,enpass));
+                    enpass = enc.encryp(password,passphrase);
+                    unpass = enc.encryp(uname,passphrase);
+                    snpass = enc.encryp(sname,passphrase);
+                    Log.i("Encryption","done");
+                    storeSQLite();
+                    //datastore ds = new datastore(cn);
+                    //ds.addflist(new fulllist(snpass,unpass,enpass));
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -256,5 +224,20 @@ public class generate extends AppCompatActivity
         TextView uiemail = (TextView) headerView.findViewById(R.id.email);
         uiemail.setText(email);
     }
+    private void storeSQLite() {
+        // AsyncTask is used that SQLite operation not blocks the UI Thread.
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                datastore ds = new datastore(context);
+                ds.addflist(new fulllist(snpass,unpass,enpass));
+                return null;
+            }
 
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+            }
+        }.execute();
+    }
 }

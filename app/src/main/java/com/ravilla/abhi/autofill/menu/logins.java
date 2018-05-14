@@ -1,11 +1,12 @@
-package com.ravilla.abhi.autofill;
+package com.ravilla.abhi.autofill.menu;
 
-import android.content.Context;
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,11 +22,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.List;
+import com.ravilla.abhi.autofill.Authentication.AuthenticatorActivity;
+import com.ravilla.abhi.autofill.Ldispaly.list;
+import com.ravilla.abhi.autofill.R;
 
 public class logins extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,LoaderManager.LoaderCallbacks<Cursor>{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,17 +147,24 @@ public class logins extends AppCompatActivity
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.show) {
-            TextView sname = (TextView)findViewById(R.id.sitename);
-            TextView uname = (TextView)findViewById(R.id.username);
-            TextView pass = (TextView)findViewById(R.id.password);
-            datastore ds = new datastore(getApplicationContext());
-            List<fulllist> flists=ds.getAll();
-            decrypt dc = new decrypt();
-            for (fulllist fl:flists){
-                sname.setText(dc.decrypt(fl.getsite(),key()));
-                uname.setText(dc.decrypt(fl.getuname(),key()));
-                pass.setText(dc.decrypt(fl.getpassword(),key()));
-            }
+            Log.i("Flow","Starting List class");
+            Intent intent = new Intent(logins.this, list.class);
+            startActivity(intent);
+            Log.i("Flow","Done List class");
+           // TextView sname = (TextView)findViewById(R.id.sitename);
+           // TextView uname = (TextView)findViewById(R.id.username);
+           // TextView pass = (TextView)findViewById(R.id.password);
+           // datastore ds = new datastore(getApplicationContext());
+            //List<fulllist> flists=ds.getAll();
+//            Cursor cu = ds.getAll();
+//            Intent intent = new Intent(logins.this, list.class);
+//            startActivity(intent);
+//            decrypt dc = new decrypt();
+//            //for (fulllist fl:flists){
+              //  sname.setText(dc.decrypt(fl.getsite(),key()));
+              //  uname.setText(dc.decrypt(fl.getuname(),key()));
+              //  pass.setText(dc.decrypt(fl.getpassword(),key()));
+            //}
         }
     }
     private String key(){
@@ -163,5 +172,20 @@ public class logins extends AppCompatActivity
                 "User", this.MODE_PRIVATE);
         final String passphrase = sharedPref.getString("userid", "none");
         return passphrase;
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 }

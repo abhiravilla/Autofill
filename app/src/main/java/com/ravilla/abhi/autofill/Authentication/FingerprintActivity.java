@@ -1,9 +1,6 @@
-package com.ravilla.abhi.autofill;
+package com.ravilla.abhi.autofill.Authentication;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.app.KeyguardManager;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.Manifest;
@@ -17,6 +14,9 @@ import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.ravilla.abhi.autofill.R;
+
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
