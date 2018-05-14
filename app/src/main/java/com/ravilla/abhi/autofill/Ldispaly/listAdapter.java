@@ -33,7 +33,7 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.listViewHolder
 
     }
 
-    public class listViewHolder extends RecyclerView.ViewHolder {
+    public class listViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView ssname;
         public TextView suname;
@@ -44,9 +44,14 @@ public class listAdapter extends RecyclerView.Adapter<listAdapter.listViewHolder
             ssname = (AppCompatTextView) view.findViewById(R.id.ssname);
             suname = (AppCompatTextView) view.findViewById(R.id.suname);
             spass = (AppCompatTextView) view.findViewById(R.id.spass);
+
         }
 
 
+        @Override
+        public void onClick(View v) {
+
+        }
     }
 
     @Override
