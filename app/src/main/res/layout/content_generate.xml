@@ -30,7 +30,7 @@
 
     <EditText
         android:id="@+id/length"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -39,7 +39,8 @@
         android:gravity="center"
         android:hint="Password Length"
         android:inputType="number"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:background=""/>
 
     <TextView
         android:id="@+id/password"
@@ -54,7 +55,7 @@
 
     <EditText
         android:id="@+id/username"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -62,11 +63,13 @@
         android:layout_marginTop="148dp"
         android:ems="10"
         android:hint="Username"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:background=""
+        />
 
     <EditText
         android:id="@+id/site"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -74,7 +77,8 @@
         android:ems="10"
         android:gravity="center"
         android:hint="Site Name"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:background=""/>
 
     <Button
         android:id="@+id/save"

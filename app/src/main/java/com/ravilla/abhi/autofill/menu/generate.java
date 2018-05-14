@@ -159,30 +159,19 @@ public class generate extends AppCompatActivity
             TextView tv =findViewById(R.id.password);
             EditText uedt = findViewById(R.id.username);
             EditText sedt = findViewById(R.id.site);
-            String uname =uedt.getText().toString();
-            String sname =sedt.getText().toString();
-            if(TextUtils.isEmpty(uname)){
+            unpass =uedt.getText().toString();
+            snpass =sedt.getText().toString();
+            if(TextUtils.isEmpty(unpass)){
                 Toast to = Toast.makeText(context,"Enter Username",Toast.LENGTH_LONG);
                 to.show();
                 return ;
-            }else if(TextUtils.isEmpty(sname)){
+            }else if(TextUtils.isEmpty(snpass)){
                 Toast to=Toast.makeText(context,"Enter Site name",Toast.LENGTH_LONG);
                 to.show();
                 return;
             }else {
-                String password = tv.getText().toString();
-                encrypt enc = new encrypt();
-                try {
-                    enpass = enc.encryp(password,passphrase);
-                    unpass = enc.encryp(uname,passphrase);
-                    snpass = enc.encryp(sname,passphrase);
-                    Log.i("Encryption","done");
+                  enpass = tv.getText().toString();
                     storeSQLite();
-                    //datastore ds = new datastore(cn);
-                    //ds.addflist(new fulllist(snpass,unpass,enpass));
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
             }
         }
     }

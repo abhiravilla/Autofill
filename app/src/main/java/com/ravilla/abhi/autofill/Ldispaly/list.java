@@ -75,12 +75,12 @@ public class list extends AppCompatActivity{
             protected Void doInBackground(Void... params) {
                 listBeneficiary.clear();
                 List<fulllist> lfull = databaseHelper. getAll();
-                decrypt dc = new decrypt();
-                for (fulllist fl:lfull){
-                  fl.setsite(" "+dc.decrypt(fl.getsite(),key())+" ");
-                  fl.setUname(" "+dc.decrypt(fl.getuname(),key())+" ");
-                  fl.setPassword(" "+dc.decrypt(fl.getpassword(),key())+" ");
-                }
+//                decrypt dc = new decrypt();
+//                for (fulllist fl:lfull){
+//                  fl.setsite(" "+dc.decrypt(fl.getsite(),key())+" ");
+//                  fl.setUname(" "+dc.decrypt(fl.getuname(),key())+" ");
+//                  fl.setPassword(" "+dc.decrypt(fl.getpassword(),key())+" ");
+//                }
                 listBeneficiary.addAll(lfull);
                 Log.i("Flow","returned list size "+lfull.size());
                 return null;
