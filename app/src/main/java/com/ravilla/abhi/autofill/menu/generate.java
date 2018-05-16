@@ -171,7 +171,8 @@ public class generate extends AppCompatActivity
                 return;
             }else {
                   enpass = tv.getText().toString();
-                    storeSQLite();
+                  enpass= new encrypt().encryp(enpass,key());
+                  storeSQLite();
             }
         }
     }
@@ -228,5 +229,11 @@ public class generate extends AppCompatActivity
                 super.onPostExecute(aVoid);
             }
         }.execute();
+    }
+    private String key(){
+        SharedPreferences sharedPref = getSharedPreferences(
+                "User", this.MODE_PRIVATE);
+        final String passphrase = sharedPref.getString("userid", "none");
+        return passphrase;
     }
 }
